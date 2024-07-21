@@ -1,0 +1,157 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator erd {
+  provider = "prisma-erd-generator"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model nursery {
+  id        String   @id
+  name      String   @db.VarChar(255)
+  address   String   @db.Text
+  phone     String   @db.VarChar(15)
+  email     String   @db.VarChar(355)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  staff     staff[]
+}
+
+model staff {
+  id        String   @id
+  nurseryId String
+  reference String   @db.VarChar(50)
+  firstName String   @db.VarChar(255)
+  lastName  String   @db.VarChar(255)
+  position  String   @db.VarChar(255)
+  gender    String   @db.TinyText()
+  address   String   @db.Text
+  phone     String   @db.VarChar(15)
+  email     String   @db.VarChar(355)
+  username  String   @db.VarChar(255)
+  password  String   @db.VarChar(255)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  nursery nursery @relation(fields: [nurseryId], references: [id])
+
+  @@unique([reference])
+}
+
+model child {
+  id        String   @id
+  reference String   @db.VarChar(50)
+  firstName String   @db.VarChar(255)
+  lastName  String   @db.VarChar(255)
+  gender    String   @db.TinyText()
+  birthDate DateTime @db.Date
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  medicalRecord medicalRecord[]
+  payment       payment[]
+  attendance    attendance[]
+  parentChild   parentChild[]
+  activity      activity[]
+
+  @@unique([reference])
+}
+
+model parent {
+  id        String   @id
+  reference String   @db.VarChar(50)
+  firstName String   @db.VarChar(255)
+  lastName  String   @db.VarChar(255)
+  gender    String   @db.TinyText()
+  address   String   @db.Text
+  phone     String   @db.VarChar(15)
+  email     String   @db.VarChar(355)
+  username  String   @db.VarChar(255)
+  password  String   @db.VarChar(255)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  parentChild parentChild[]
+
+  @@unique([reference])
+}
+
+model parentChild {
+  id       String @id
+  parentId String
+  childId  String
+  parent   parent @relation(fields: [parentId], references: [id])
+  child    child  @relation(fields: [childId], references: [id])
+  @@map("parent_child")
+}
+
+model activity {
+  id             String       @id
+  activityTypeId String
+  childId        String
+  period         DateTime     @db.DateTime
+  note           String       @db.Text
+  status         Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  activityType   activityType @relation(fields: [activityTypeId], references: [id])
+  child          child        @relation(fields: [childId], references: [id])
+}
+
+model activityType {
+  id        String     @id
+  nurseryId String
+  name      String     @db.VarChar(50)
+  status    Boolean    @default(true)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  activity  activity[]
+  @@map("activity_type")
+}
+
+model medicalRecord {
+  id           String   @id
+  childId      String
+  allergies    String   @db.VarChar(50)
+  medication   String   @db.VarChar(50)
+  specialNeeds String   @db.VarChar(50)
+  status       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  child        child    @relation(fields: [childId], references: [id])
+  @@map("medical_record")
+}
+
+model payment {
+  id        String   @id
+  childId   String
+  method    String   @db.VarChar(100)
+  amount    Float    @db.Float
+  paidOn    DateTime
+  status    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  child     child    @relation(fields: [childId], references: [id])
+}
+
+model attendance {
+  id        String   @id
+  childId   String
+  checkIn   DateTime
+  checkOut  DateTime
+  status    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  child     child    @relation(fields: [childId], references: [id])
+}
