@@ -23,7 +23,7 @@ export default function Home() {
       <div className="py-10 mx-auto w-full max-w-7xl min-h-screen flex flex-col space-y-20">
          <h1 className="text-3xl text-primary font-inter">DashBoard Page</h1>
          <div className="p-6 bg-white rounded-xl grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10">
-            { menus?.map((r:any) => (<DashMenuBox Icon={r?.Icon} title={r?.title} link={r?.link} />))}
+            { menus?.map((r:any) => (<DashMenuBox key={r} Icon={r?.Icon} title={r?.title} link={r?.link} />))}
          </div>
       </div>
       
