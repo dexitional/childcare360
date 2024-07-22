@@ -1,6 +1,7 @@
 "use client"
  
 import { ColumnDef } from "@tanstack/react-table"
+import { HiDotsHorizontal } from "react-icons/hi"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,22 +11,55 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import Link from "next/link"
-import { HiDotsHorizontal } from "react-icons/hi"
-    
-export type MainActivity = {
+  
+export type Child = {
   id: string
-  activity: string
+  title: string
+  reference: string
+  fname: string
+  lname: string
+  gender: string
+  phone: string
+  address: string
   class: string
+  position: string
+  action: any
+  
 }
    
-export const mainActivityColumns: ColumnDef<MainActivity>[] = [
+export const staffColumns: ColumnDef<Child>[] = [
+  
   {
-    accessorKey: "activity",
-    header: "Main Activity",
+    accessorKey: "reference",
+    header: "Reference",
+  },
+  {
+    accessorKey: "fname",
+    header: "First Name",
+  },
+  {
+    accessorKey: "lname",
+    header: "Last Name",
+  },
+  {
+    accessorKey: "gender",
+    header: "Gender",
+  },
+  {
+    accessorKey: "email",
+    header: "Email",
+  },
+  {
+    accessorKey: "phone",
+    header: "Phone",
   },
   {
     accessorKey: "class",
-    header: "Class Group",
+    header: "Assigned Class",
+  },
+  {
+    accessorKey: "position",
+    header: "Position",
   },
   {
     id:'343',
@@ -42,11 +76,12 @@ export const mainActivityColumns: ColumnDef<MainActivity>[] = [
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="font-semibold text-primary/80 tracking-wide">
-            <DropdownMenuItem><Link href="/">Edit Record</Link></DropdownMenuItem>
-            <DropdownMenuItem><Link href="/">Delete Record</Link></DropdownMenuItem>
+            <DropdownMenuItem><Link href="/parent/4/edit">Edit Record</Link></DropdownMenuItem>
+            <DropdownMenuItem><Link href="/parent/4/delete">Delete Record</Link></DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
     },
   },
+  
 ]

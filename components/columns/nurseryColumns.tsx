@@ -11,21 +11,34 @@ import {
 } from "@/components/ui/dropdown-menu"
 import Link from "next/link"
 import { HiDotsHorizontal } from "react-icons/hi"
-    
-export type MainActivity = {
+  
+  
+export type Nursery = {
   id: string
-  activity: string
-  class: string
+  title: string
+  reference: string
+  child: string
+  paidAt: string
+  amount: number
+  
 }
    
-export const mainActivityColumns: ColumnDef<MainActivity>[] = [
+export const nurseryColumns: ColumnDef<Nursery>[] = [
   {
-    accessorKey: "activity",
-    header: "Main Activity",
+    accessorKey: "name",
+    header: "Name",
   },
   {
-    accessorKey: "class",
-    header: "Class Group",
+    accessorKey: "phone",
+    header: "Phone",
+  },
+  {
+    accessorKey: "address",
+    header: "Address",
+  },
+  {
+    accessorKey: "staff",
+    header: "Assigned Staff",
   },
   {
     id:'343',
@@ -42,6 +55,8 @@ export const mainActivityColumns: ColumnDef<MainActivity>[] = [
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="font-semibold text-primary/80 tracking-wide">
+            <DropdownMenuItem><Link href="/">Goto Classroom</Link></DropdownMenuItem>
+            <DropdownMenuSeparator />
             <DropdownMenuItem><Link href="/">Edit Record</Link></DropdownMenuItem>
             <DropdownMenuItem><Link href="/">Delete Record</Link></DropdownMenuItem>
           </DropdownMenuContent>

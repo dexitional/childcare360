@@ -16,6 +16,7 @@ import GoHome from "@/components/GoHome";
 import Create from "@/components/Create";
 import { childColumns } from "@/components/columns/childColumns";
 import { mainPaymentColumns } from "@/components/columns/mainPaymentColumns";
+import { nurseryColumns } from "@/components/columns/nurseryColumns";
 
 
 export default function Home() {
@@ -98,36 +99,25 @@ export default function Home() {
     },
   ]
 
-  const mchildren:any = [
-    { reference:'41329276', fname: 'Ebenezer Kwabena Blay', lname: 'Ackah', nursery:'Creche', gender:'Male', birthDate:'Feb 28, 2019', age: '4', action: 'test'},
-    { reference:'32323222', fname: 'Solomon', lname: 'Odame',nursery:'Nursery II', gender:'Male',  birthDate:'Feb 28, 2019', age: '3', action: 'test'},
-    { reference:'41329276', fname: 'Sally Margaret', lname: 'Ackah',nursery:'Kindergaten I', gender:'Female', birthDate:'Feb 28, 2019', age: '4', action: 'test'},
-  ] 
+  const nurseries:any = [
+    { name: 'Creche', phone: '0277675089', address:'East Floor, Aquainass Building', staff: '2'},
+    { name: 'Nursery I', phone: '0277675089', address:'East Floor, Aquainass Building', staff: '2'},
+    { name: 'Nursery II', phone: '0277675089', address:'East Floor, Aquainass Building', staff: '2'},
+  ]
 
   return (
     <main className="px-3 md:px-0 min-h-screen bg-primarybg/70 flex flex-col">
-      
-      {/* Parent Dashboard */}
       <div className="py-4 md:py-10 md:mx-auto w-full md:max-w-7xl flex flex-col space-y-4 md:space-y-14">
-        <PageTitle label="PARENT DASHBOARD" />
-        <div className="p-3 md:p-6 bg-white shadow-[0px_0px_8px_#ccc_inset] rounded-xl grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10">
-            { children?.map((r:any) => (<ChildMenuBox key={r} Icon={r?.Icon} title={r?.title} link={r?.link} />))}
-        </div>
-      </div>
-
-     {/* Staff Dashboard */}
-     {/* <div className="py-4 md:py-10 md:mx-auto w-full md:max-w-7xl flex flex-col space-y-4 md:space-y-14">
-         <PageTitle label="STAFF DASHBOARD">
-            <button className="px-4 py-1 w-fit border-2 rounded text-sm bg-primary border-primary/40 text-secondary font-semibold font-inter tracking-widest">Goto Classroom</button>
+         <PageTitle label="NURSERY MANAGEMENT">
+           <Create /><GoHome />
          </PageTitle>
-         <div className="p-6 bg-white shadow-[0px_0px_8px_#ccc_inset] rounded-xl grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10">
-            { menus?.map((r:any) => (<DashMenuBox key={r} Icon={r?.Icon} title={r?.title} link={r?.link} />))}
+         <div className="px-6 py-6 flex flex-col space-y-4 bg-white shadow-[0px_0px_8px_#ccc_inset] rounded-xl">
+            {/* <div className="px-4 py-2 w-full md:w-fit rounded bg-primary/90 text-primarybg text-[0.65rem] md:text-sm font-bold tracking-widest">EBENEZERZER KWABENA BLAY ACKAH</div> */}
+            <div>
+              <DataTable columns={nurseryColumns} data={nurseries} />
+            </div>
          </div>
-      </div> */}
-
-
-      
-
+      </div>
     </main>
   );
 }

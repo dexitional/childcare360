@@ -16,6 +16,7 @@ import GoHome from "@/components/GoHome";
 import Create from "@/components/Create";
 import { childColumns } from "@/components/columns/childColumns";
 import { mainPaymentColumns } from "@/components/columns/mainPaymentColumns";
+import { staffColumns } from "@/components/columns/staffColumns";
 
 
 export default function Home() {
@@ -98,22 +99,21 @@ export default function Home() {
     },
   ]
 
-  const mchildren:any = [
-    { reference:'41329276', fname: 'Ebenezer Kwabena Blay', lname: 'Ackah', nursery:'Creche', gender:'Male', birthDate:'Feb 28, 2019', age: '4', action: 'test'},
-    { reference:'32323222', fname: 'Solomon', lname: 'Odame',nursery:'Nursery II', gender:'Male',  birthDate:'Feb 28, 2019', age: '3', action: 'test'},
-    { reference:'41329276', fname: 'Sally Margaret', lname: 'Ackah',nursery:'Kindergaten I', gender:'Female', birthDate:'Feb 28, 2019', age: '4', action: 'test'},
+  const staff:any = [
+    { reference:'41329276', fname: 'Ebenezer Kwabena Blay', lname: 'Ackah', position:'Tutor',class:'Nursery I', gender:'Male', phone:'0277675089', email:'ebenezerkb@gmail.com'},
+    { reference:'1234567', fname: 'Adwoa', lname: 'Antwi', position:'Tutor',class:'Creche', gender:'Female', phone:'0277675089', email:'ebenezerkb@gmail.com'},
   ] 
 
   return (
     <main className="px-3 md:px-0 min-h-screen bg-primarybg/70 flex flex-col">
-      <div className="py-4 md:py-10 md:mx-auto w-full md:max-w-7xl flex flex-col space-y-4 md:space-y-14">
-         <PageTitle label="CHILD PAYMENTS">
-           <GoHome />
+       <div className="py-4 md:py-10 md:mx-auto w-full md:max-w-7xl flex flex-col space-y-4 md:space-y-14">
+         <PageTitle label="STAFF MANAGEMENT">
+           <Create /><GoHome />
          </PageTitle>
-         <div className="px-10 py-6 flex flex-col space-y-4 bg-white shadow-[0px_0px_8px_#ccc_inset] rounded-xl">
-            <div className="px-4 py-2 w-full md:w-fit rounded bg-primary/90 text-primarybg text-[0.65rem] md:text-sm font-bold tracking-widest">EBENEZERZER KWABENA BLAY ACKAH</div>
+         <div className="px-6 py-6 flex flex-col space-y-4 bg-white shadow-[0px_0px_8px_#ccc_inset] rounded-xl">
+            {/* <div className="px-4 py-2 w-full md:w-fit rounded bg-primary/90 text-primarybg text-[0.65rem] md:text-sm font-bold tracking-widest">EBENEZERZER KWABENA BLAY ACKAH</div> */}
             <div>
-              <DataTable columns={paymentColumns} data={payments} />
+              <DataTable columns={staffColumns} data={staff} />
             </div>
          </div>
       </div>
