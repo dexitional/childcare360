@@ -7,9 +7,9 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col">
         <Header />
-        <div className={`relative w-full h-[50rem] bg-primarybg  rounded-bl-[95%]`}>
-            <Image src={Bg} alt="Login" className="z-1 absolute right-0 top-40 sm:-top-10" width={1000} height={1000} /> 
-            <div className="md:py-20 md:mx-auto md:max-w-7xl rounded-xl grid md:grid-cols-3">
+        <div className={`relative w-full md:h-[50rem] bg-primarybg  rounded-bl-[95%]`}>
+            <Image src={Bg} alt="Login" className="z-1 absolute right-0 top-64 md:-top-10" width={1000} height={1000} /> 
+            <div className="mt-20  md:py-20 md:mx-auto md:max-w-7xl rounded-xl grid md:grid-cols-3">
                 <div></div>
                 <div></div>
                 <div className="z-10 h-64 bg-secondary/20 border-8 border-secondary rounded-tr-3xl rounded-bl-3xl shadow-xl flex items-center justify-center">
