@@ -19,10 +19,10 @@ function ChildMenuBox({ title, Icon, link }: Props) {
             <span className="font-semibold text-xs md:text-sm italic tracking-wider text-[#f69320]">Kingergaten 2</span>
         </div>
         <div className="px-2 py-3 w-full rounded-xl grid grid-cols-1 md:grid-cols-2 gap-4 bg-white ">
-            <div className="z-1 px-3 py-1 md:py-1 w-full shadow shadow-primary/30 rounded-full bg-secondary/40 text-primary/70 text-sm md:text-sm text-center font-bold tracking-wider">Activities</div>
-            <div className="z-1 px-3 py-1 md:py-1 w-full shadow shadow-primary/30 rounded-full bg-secondary/40 text-primary/70 text-sm md:text-sm text-center font-bold tracking-wider">Payments</div>
-            <div className="z-1 px-3 py-1 md:py-1 w-full shadow shadow-primary/30 rounded-full bg-secondary/40 text-primary/70 text-sm md:text-sm text-center font-bold tracking-wider">Attendance</div>
-            <div className="z-1 px-3 py-1 md:py-1 w-full shadow shadow-primary/30 rounded-full bg-secondary/40 text-primary/70 text-sm md:text-sm text-center font-bold tracking-wider">Observations</div>
+            <Link href={`/child/4/activities`} className="z-1 px-3 py-1 md:py-1 w-full shadow shadow-primary/30 rounded-full bg-secondary/40 text-primary/70 text-sm md:text-sm text-center font-bold tracking-wider">Activities</Link>
+            <Link href={`/child/4/payments`} className="z-1 px-3 py-1 md:py-1 w-full shadow shadow-primary/30 rounded-full bg-secondary/40 text-primary/70 text-sm md:text-sm text-center font-bold tracking-wider">Payments</Link>
+            <Link href={`/child/4/attendance`} className="z-1 px-3 py-1 md:py-1 w-full shadow shadow-primary/30 rounded-full bg-secondary/40 text-primary/70 text-sm md:text-sm text-center font-bold tracking-wider">Attendance</Link>
+            <Link href={`/child/4/observations`} className="z-1 px-3 py-1 md:py-1 w-full shadow shadow-primary/30 rounded-full bg-secondary/40 text-primary/70 text-sm md:text-sm text-center font-bold tracking-wider">Observations</Link>
         </div>
     </div>
   )

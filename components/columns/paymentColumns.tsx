@@ -6,6 +6,7 @@ export type Payment = {
   id: string
   title: string
   reference: string
+  child: string
   paidAt: string
   amount: number
   
@@ -19,6 +20,10 @@ export const paymentColumns: ColumnDef<Payment>[] = [
   {
     accessorKey: "reference",
     header: "Payment Reference",
+  },
+  {
+    accessorKey: "child",
+    header: "Child Name",
   },
   {
     accessorKey: "paidAt",
