@@ -16,6 +16,8 @@ import GoHome from "@/components/GoHome";
 import Create from "@/components/Create";
 import { childColumns } from "@/components/columns/childColumns";
 import { mainPaymentColumns } from "@/components/columns/mainPaymentColumns";
+import ClassMenuBox from "@/components/ClassMenuBox";
+import { AttendanceChart } from "@/components/AttendanceChart";
 
 
 export default function Home() {
@@ -33,6 +35,12 @@ export default function Home() {
     { title: 'Nursery Management', Icon: FaMale, link:'/'},
     { title: 'Staff Management', Icon: FaFemale, link:'/'},
     { title: 'Staff Management', Icon: FaFemale, link:'/'},
+  ] 
+
+  const cmenus:any = [
+    { title: 'Record Attendance', Icon: FaChildren, link:'/nurseries'},
+    { title: 'Record Activity', Icon: FaPeopleGroup, link:'/staff'},
+    { title: 'Record Observation', Icon: FaHandsHoldingChild, link:'/child'},
   ] 
 
   return (
@@ -54,6 +62,19 @@ export default function Home() {
          <div className="p-6 bg-white shadow-[0px_0px_8px_#ccc_inset] rounded-xl grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10">
             { menus?.map((r:any) => (<DashMenuBox key={r} Icon={r?.Icon} title={r?.title} link={r?.link} />))}
          </div>
+      </div>
+
+
+       {/* Classroom Dashboard */}
+      <div className="py-4 md:py-10 md:mx-auto w-full md:max-w-7xl flex flex-col space-y-4 md:space-y-14">
+         <PageTitle label="CRECHE I CLASSROOM" />
+         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="col-span-2 p-6 md:h-fit bg-white shadow-[0px_0px_8px_#ccc_inset] rounded-xl grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+                { cmenus?.map((r:any) => (<ClassMenuBox key={r} Icon={r?.Icon} title={r?.title} link={r?.link} />))}
+            </div>
+            <AttendanceChart />
+         </div>
+        
       </div>
 
 

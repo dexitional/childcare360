@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react'
 import { MdOutlineChildCare, MdPersonPin } from "react-icons/md";
 
@@ -22,9 +23,12 @@ function Header({}: Props) {
                     </div>
                     <span className="hidden md:block w-52 text-primary font-inter font-medium truncate">Ebenezer Kwabena Blay Ackah  </span>
                 </div>
-                <button className="px-2 md:px-4 py-0.5 rounded md:border-b-4 border-primary/20 focus-visible:border-primary/40 bg-secondary text-xs md:text-lg text-primary md:font-bold">
+                {/* <button className="px-2 md:px-4 py-0.5 rounded md:border-b-4 border-primary/20 focus-visible:border-primary/40 bg-secondary text-xs md:text-lg text-primary md:font-bold">
                     Logout
-                </button>
+                </button> */}
+                <Link href="/" className="px-2 md:px-4 py-0.5 rounded md:border-b-4 border-primary/20 focus-visible:border-primary/40 bg-secondary text-xs md:text-lg text-primary md:font-bold">
+                    Logout
+                </Link>
             </div>
         </div>
     </header>

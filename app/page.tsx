@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Bg from '../public/loginbg.svg'
 import Header from "@/components/Header";
+import Link from "next/link";
 
 
 export default function Home() {
@@ -22,7 +23,8 @@ export default function Home() {
                          <span className="py-2 font-black font-kalam text-lg text-primary tracking-widest">PASSWORD</span>
                          <input className="px-4 py-3 ring-4 ring-secondary placeholder:text-[#F69320] placeholder:text-sm placeholder:font-semibold placeholder:tracking-widest rounded-full" type="text" placeholder="PASSWORD" />
                       </label>
-                      <button className="px-6 py-3 bg-primary border-4 border-secondary rounded-full text-secondary text-xl font-inter font-bold tracking-widest">SIGN IN</button>
+                      {/* <button className="px-6 py-3 bg-primary border-4 border-secondary rounded-full text-secondary text-xl font-inter font-bold tracking-widest">SIGN IN</button> */}
+                      <Link href="/dash" className="px-6 py-3 bg-primary border-4 border-secondary rounded-full text-secondary text-xl text-center font-inter font-bold tracking-widest">SIGN IN</Link>
                     </form>
                 </div>
             </div>
