@@ -1,16 +1,17 @@
 "use client"
  
-import { ColumnDef } from "@tanstack/react-table"
-import { HiDotsHorizontal } from "react-icons/hi"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
+import { ColumnDef } from "@tanstack/react-table"
 import Link from "next/link"
+import { HiDotsHorizontal } from "react-icons/hi"
+import SheetModal from "../SheetModal"
+import ParentForm from "../forms/ParentForm"
   
 export type Child = {
   id: string
@@ -75,7 +76,9 @@ export const parentColumns: ColumnDef<Child>[] = [
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="font-semibold text-primary/80 tracking-wide">
-            <DropdownMenuItem><Link href="/parent/4/edit">Edit Record</Link></DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <SheetModal title="Edit Parent" Trigger={<button className={`px-2 text-sm`}>Edit Record</button>}><ParentForm data={row}/></SheetModal>
+            <DropdownMenuSeparator />
             <DropdownMenuItem><Link href="/parent/4/delete">Delete Record</Link></DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

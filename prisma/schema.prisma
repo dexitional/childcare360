@@ -15,10 +15,14 @@ generator erd {
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
+
+  // provider  = "postgresql"
+  // url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  // directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
 model nursery {
-  id        String   @id
+  id        String   @id @default(uuid())
   name      String   @db.VarChar(255)
   address   String   @db.Text
   phone     String   @db.VarChar(15)
@@ -29,32 +33,31 @@ model nursery {
 }
 
 model staff {
-  id        String   @id
-  nurseryId String
+  id        String   @id @default(uuid())
+  nurseryId String?
   reference String   @db.VarChar(50)
   firstName String   @db.VarChar(255)
   lastName  String   @db.VarChar(255)
   position  String   @db.VarChar(255)
-  gender    String   @db.TinyText()
+  gender    String   @db.VarChar(1)
   address   String   @db.Text
   phone     String   @db.VarChar(15)
   email     String   @db.VarChar(355)
-  username  String   @db.VarChar(255)
   password  String   @db.VarChar(255)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  nursery nursery @relation(fields: [nurseryId], references: [id])
+  nursery nursery? @relation(fields: [nurseryId], references: [id])
 
   @@unique([reference])
 }
 
 model child {
-  id        String   @id
+  id        String   @id @default(uuid())
   reference String   @db.VarChar(50)
   firstName String   @db.VarChar(255)
   lastName  String   @db.VarChar(255)
-  gender    String   @db.TinyText()
+  gender    String   @db.VarChar(1)
   birthDate DateTime @db.Date
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -69,15 +72,14 @@ model child {
 }
 
 model parent {
-  id        String   @id
+  id        String   @id @default(uuid())
   reference String   @db.VarChar(50)
   firstName String   @db.VarChar(255)
   lastName  String   @db.VarChar(255)
-  gender    String   @db.TinyText()
+  gender    String   @db.VarChar(1)
   address   String   @db.Text
   phone     String   @db.VarChar(15)
   email     String   @db.VarChar(355)
-  username  String   @db.VarChar(255)
   password  String   @db.VarChar(255)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -88,19 +90,20 @@ model parent {
 }
 
 model parentChild {
-  id       String @id
+  id       String @id @default(uuid())
   parentId String
   childId  String
   parent   parent @relation(fields: [parentId], references: [id])
   child    child  @relation(fields: [childId], references: [id])
+
   @@map("parent_child")
 }
 
 model activity {
-  id             String       @id
+  id             String       @id @default(uuid())
   activityTypeId String
   childId        String
-  period         DateTime     @db.DateTime
+  period         DateTime     @db.Date
   note           String       @db.Text
   status         Boolean      @default(true)
   createdAt      DateTime     @default(now())
@@ -110,18 +113,19 @@ model activity {
 }
 
 model activityType {
-  id        String     @id
+  id        String     @id @default(uuid())
   nurseryId String
   name      String     @db.VarChar(50)
   status    Boolean    @default(true)
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   activity  activity[]
+
   @@map("activity_type")
 }
 
 model medicalRecord {
-  id           String   @id
+  id           String   @id @default(uuid())
   childId      String
   allergies    String   @db.VarChar(50)
   medication   String   @db.VarChar(50)
@@ -130,14 +134,17 @@ model medicalRecord {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   child        child    @relation(fields: [childId], references: [id])
+
   @@map("medical_record")
 }
 
 model payment {
-  id        String   @id
+  id        String   @id @default(uuid())
   childId   String
+  narrative String   @db.VarChar(255)
   method    String   @db.VarChar(100)
-  amount    Float    @db.Float
+  // amount    Float    @db.DoublePrecision
+  amount    Float    @db.Double
   paidOn    DateTime
   status    Boolean  @default(true)
   createdAt DateTime @default(now())
@@ -146,12 +153,12 @@ model payment {
 }
 
 model attendance {
-  id        String   @id
+  id        String    @id @default(uuid())
   childId   String
-  checkIn   DateTime
-  checkOut  DateTime
-  status    Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  child     child    @relation(fields: [childId], references: [id])
+  checkIn   DateTime?
+  checkOut  DateTime?
+  status    Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  child     child     @relation(fields: [childId], references: [id])
 }

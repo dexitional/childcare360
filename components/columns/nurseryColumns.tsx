@@ -1,16 +1,17 @@
 "use client"
  
-import { ColumnDef } from "@tanstack/react-table"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
+import { ColumnDef } from "@tanstack/react-table"
 import Link from "next/link"
 import { HiDotsHorizontal } from "react-icons/hi"
+import SheetModal from "../SheetModal"
+import NurseryForm from "../forms/NurseryForm"
   
   
 export type Nursery = {
@@ -51,13 +52,14 @@ export const nurseryColumns: ColumnDef<Nursery>[] = [
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button className="px-2 py-0 rounded border-2 border-primary/40 text-right font-medium">
-                <HiDotsHorizontal className="h-6 w-6 text-primary/60" />
+              <HiDotsHorizontal className="h-6 w-6 text-primary/60" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="font-semibold text-primary/80 tracking-wide">
             <DropdownMenuItem><Link href="/">Goto Classroom</Link></DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem><Link href="/">Edit Record</Link></DropdownMenuItem>
+            <SheetModal title="Edit Nursery" Trigger={<button className={`px-2 text-sm`}>Edit Record</button>}><NurseryForm data={row}/></SheetModal>
+            <DropdownMenuSeparator />
             <DropdownMenuItem><Link href="/">Delete Record</Link></DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

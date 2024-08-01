@@ -11,39 +11,22 @@ import { ColumnDef } from "@tanstack/react-table"
 import Link from "next/link"
 import { HiDotsHorizontal } from "react-icons/hi"
 import SheetModal from "../SheetModal"
-import ActivityForm from "../forms/ActivityForm"
-  
-export type Child = {
+import ActivityTypeForm from "../forms/ActivityTypeForm"
+    
+export type MainActivity = {
   id: string
-  title: string
-  reference: string
-  fname: string
-  lname: string
-  gender: string
-  phone: string
-  address: string
-  username: string
-  action: any
-  
+  activity: string
+  class: string
 }
    
-export const mainActivityColumns: ColumnDef<Child>[] = [
-  
-  {
-    accessorKey: "child",
-    header: "Child Name",
-  },
+export const mainActivityCatColumns: ColumnDef<MainActivity>[] = [
   {
     accessorKey: "activity",
-    header: "Activity Category",
+    header: "Main Activity",
   },
   {
-    accessorKey: "note",
-    header: "Activity Note",
-  },
-  {
-    accessorKey: "createdAt",
-    header: "Activity Period",
+    accessorKey: "class",
+    header: "Class Group",
   },
   {
     id:'343',
@@ -61,13 +44,12 @@ export const mainActivityColumns: ColumnDef<Child>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent className="font-semibold text-primary/80 tracking-wide">
             <DropdownMenuSeparator />
-            <SheetModal title="Edit Activity" Trigger={<button className={`px-2 text-sm`}>Edit Record</button>}><ActivityForm data={row}/></SheetModal>
+            <SheetModal title="Edit Category" Trigger={<button className={`px-2 text-sm`}>Edit Record</button>}><ActivityTypeForm data={row}/></SheetModal>
             <DropdownMenuSeparator />
-            <DropdownMenuItem><Link href="/parent/4/delete">Delete Record</Link></DropdownMenuItem>
+            <DropdownMenuItem><Link href="/">Delete Record</Link></DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
     },
   },
-  
 ]

@@ -1,16 +1,17 @@
 "use client"
  
-import { ColumnDef } from "@tanstack/react-table"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
+import { ColumnDef } from "@tanstack/react-table"
 import Link from "next/link"
 import { HiDotsHorizontal } from "react-icons/hi"
+import SheetModal from "../SheetModal"
+import PaymentForm from "../forms/PaymentForm"
   
   
 export type Payment = {
@@ -29,7 +30,7 @@ export const mainPaymentColumns: ColumnDef<Payment>[] = [
     header: "Child Name",
   },
   {
-    accessorKey: "title",
+    accessorKey: "narrative",
     header: "Payment Narrative",
   },
   {
@@ -59,7 +60,9 @@ export const mainPaymentColumns: ColumnDef<Payment>[] = [
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="font-semibold text-primary/80 tracking-wide">
-            <DropdownMenuItem><Link href="/">Edit Payment</Link></DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <SheetModal title="Edit Payment" Trigger={<button className={`px-2 text-sm`}>Edit Record</button>}><PaymentForm data={row}/></SheetModal>
+            <DropdownMenuSeparator />
             <DropdownMenuItem><Link href="/">Delete Payment</Link></DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

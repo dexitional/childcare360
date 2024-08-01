@@ -11,7 +11,7 @@ import { ColumnDef } from "@tanstack/react-table"
 import Link from "next/link"
 import { HiDotsHorizontal } from "react-icons/hi"
 import SheetModal from "../SheetModal"
-import ActivityForm from "../forms/ActivityForm"
+import AttendanceForm from "../forms/AttendanceForm"
   
 export type Child = {
   id: string
@@ -27,23 +27,23 @@ export type Child = {
   
 }
    
-export const mainActivityColumns: ColumnDef<Child>[] = [
+export const mainAttendColumns: ColumnDef<Child>[] = [
   
   {
     accessorKey: "child",
     header: "Child Name",
   },
   {
-    accessorKey: "activity",
-    header: "Activity Category",
+    accessorKey: "period",
+    header: "Period",
   },
   {
-    accessorKey: "note",
-    header: "Activity Note",
+    accessorKey: "checkin",
+    header: "Time In",
   },
   {
-    accessorKey: "createdAt",
-    header: "Activity Period",
+    accessorKey: "checkout",
+    header: "Time Out",
   },
   {
     id:'343',
@@ -56,14 +56,14 @@ export const mainActivityColumns: ColumnDef<Child>[] = [
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button className="px-2 py-0 rounded border-2 border-primary/40 text-right font-medium">
-                <HiDotsHorizontal className="h-6 w-6 text-primary/60" />
+              <HiDotsHorizontal className="h-6 w-6 text-primary/60" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="font-semibold text-primary/80 tracking-wide">
             <DropdownMenuSeparator />
-            <SheetModal title="Edit Activity" Trigger={<button className={`px-2 text-sm`}>Edit Record</button>}><ActivityForm data={row}/></SheetModal>
+            <SheetModal title="Edit Attendance" Trigger={<button className={`px-2 text-sm`}>Edit Record</button>}><AttendanceForm data={row}/></SheetModal>
             <DropdownMenuSeparator />
-            <DropdownMenuItem><Link href="/parent/4/delete">Delete Record</Link></DropdownMenuItem>
+            <DropdownMenuItem><Link href="/attendance/4/delete">Delete Record</Link></DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
