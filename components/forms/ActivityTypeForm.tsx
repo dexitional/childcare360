@@ -56,7 +56,7 @@ function ActivityTypeForm({ data }: Props) {
             <span className="indent-4 font-bold text-base text-primary/80 ">Class Group</span>
             <select name="nurseryId" defaultValue={data?.nurseryId} className="px-4 py-2 bg-[#FAF6F2] rounded-full text-primary shadow focus:outline-none focus:ring-4 focus:ring-secondary/40 w-full">
              { helper?.nurseries?.map((row:any) => (
-                <option value={row?.id} selected={data?.nurseryId == row?.id}>{row?.name}</option>    
+                <option key={row?.id} value={row?.id} selected={data?.nurseryId == row?.id}>{row?.name}</option>    
               ))}
             </select>
         </label>

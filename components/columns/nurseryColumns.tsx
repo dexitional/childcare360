@@ -44,9 +44,8 @@ export const nurseryColumns: ColumnDef<Nursery>[] = [
     header: "Assigned Staff",
     cell: ({ row }) => {
       const data:any = row?.original;
-      console.log(data)
       if(!data?.staff.length) return(<div className="text-xs font-medium">-- Not Assigned --</div>)
-      return (<div className="flex flex-col space-y-1 font-sans">{data.staff.map((r:any) => (<div className="text-primary font-medium">{r?.firstName} {r?.lastName}</div>))}</div>)
+      return (<div className="flex flex-col space-y-1 font-sans">{data?.staff?.map((r:any) => (<div key={r.id} className="text-primary font-medium">{r?.firstName} {r?.lastName}</div>))}</div>)
     }
   },
   {

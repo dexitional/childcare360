@@ -79,7 +79,7 @@ function PaymentForm({ data }: Props) {
             <select name="childId" defaultValue={data?.childId} className="px-4 py-2 bg-[#FAF6F2] rounded-full text-primary shadow focus:outline-none focus:ring-4 focus:ring-secondary/40 w-full">
              <option>-- Choose Child --</option>
             { helper?.child?.map((row:any) => (
-                <option value={row?.id} selected={data?.childId == row?.id}>{row?.firstName} {row?.lastName} ({row?.reference}) - {row?.nursery?.name}</option>    
+                <option key={row?.id} value={row?.id} selected={data?.childId == row?.id}>{row?.firstName} {row?.lastName} ({row?.reference}) - {row?.nursery?.name}</option>    
               ))}
             </select>
         </label>
