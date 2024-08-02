@@ -1,5 +1,6 @@
 "use client"
  
+import { deleteNursery } from "@/backend/controller"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,6 +13,7 @@ import Link from "next/link"
 import { HiDotsHorizontal } from "react-icons/hi"
 import SheetModal from "../SheetModal"
 import NurseryForm from "../forms/NurseryForm"
+import { toast } from "../ui/use-toast"
   
   
 export type Nursery = {
@@ -40,9 +42,15 @@ export const nurseryColumns: ColumnDef<Nursery>[] = [
   {
     accessorKey: "staff",
     header: "Assigned Staff",
+    cell: ({ row }) => {
+      const data:any = row?.original;
+      console.log(data)
+      if(!data?.staff.length) return(<div className="text-xs font-medium">-- Not Assigned --</div>)
+      return (<div className="flex flex-col space-y-1 font-sans">{data.staff.map((r:any) => (<div className="text-primary font-medium">{r?.firstName} {r?.lastName}</div>))}</div>)
+    }
   },
   {
-    id:'343',
+    id: Date.now().toFixed(1),
     //accessorKey: "action",
     header: () => <div className="text-right">&nbsp;</div>,
     cell: ({ row }) => {
@@ -58,9 +66,22 @@ export const nurseryColumns: ColumnDef<Nursery>[] = [
           <DropdownMenuContent className="font-semibold text-primary/80 tracking-wide">
             <DropdownMenuItem><Link href="/">Goto Classroom</Link></DropdownMenuItem>
             <DropdownMenuSeparator />
-            <SheetModal title="Edit Nursery" Trigger={<button className={`px-2 text-sm`}>Edit Record</button>}><NurseryForm data={row}/></SheetModal>
+            <SheetModal title="Edit Nursery" Trigger={<button className={`px-2 text-sm`}>Edit Record</button>}><NurseryForm data={row?.original}/></SheetModal>
             <DropdownMenuSeparator />
-            <DropdownMenuItem><Link href="/">Delete Record</Link></DropdownMenuItem>
+            <DropdownMenuItem>
+              <form action={async (formData:FormData) => {
+                  try {
+                     const resp = await deleteNursery(formData);
+                     if(resp) toast({ title: "Record Deleted!", className:"px-4 py-3 bg-green-100 text-green-800", position:"top" })
+                  } catch (error) {
+                    toast({ title: "Deletion failed!", variant: "destructive", className:"py-3 tracking-wider", position:"top" })
+                  }
+                  
+              }}>
+                 <input type="hidden" name="id" value={row?.id} />
+               <button type="submit">Delete Record</button>   
+              </form>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )

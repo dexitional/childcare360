@@ -1,3 +1,4 @@
+import { fetcCategories } from "@/backend/controller";
 import Create from "@/components/Create";
 import GoHome from "@/components/GoHome";
 import PageTitle from "@/components/PageTitle";
@@ -6,16 +7,13 @@ import { mainActivityCatColumns } from "@/components/columns/mainActivityCatColu
 import ActivityTypeForm from "@/components/forms/ActivityTypeForm";
 import { DataTable } from "@/components/ui/datatable";
 
+async function getData(){
+  const data = await fetcCategories() ?? [];
+  return data;
+}
+export default async function Home() {
 
-export default function Home() {
-
- 
-
-  const activities:any = [
-    { activity: 'Nap', class:'Crech I'},
-    { activity: 'Depart',  class:'Nursery I'},
-    { activity: 'Medication', class:'Nursery II'},
-  ] 
+  const activities:any = await getData();
 
   return (
     <main className="px-3 md:px-0 min-h-screen bg-primarybg/70 flex flex-col">

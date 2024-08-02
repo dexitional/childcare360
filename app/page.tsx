@@ -1,10 +1,22 @@
-import Image from "next/image";
-import Bg from '../public/loginbg.svg'
+"use client"
 import Header from "@/components/Header";
-import Link from "next/link";
-
+import { signIn } from "next-auth/react";
+import Image from "next/image";
+import { useState } from "react";
+import Bg from '../public/loginbg.svg';
 
 export default function Home() {
+
+  const [form,setForm ]:any = useState();
+
+  const onChange = (e:any) => setForm({ ...form, [e.target.name]: e.target.value })
+  
+  const submitLogin:any = async (e:any) => {
+    e.preventDefault();
+     const resp = await signIn('login', { redirect: false, callbackUrl: `/dash`, username: form?.username?.trim(), password: form?.password?.trim() })
+     console.log(resp?.url)
+  }
+  
   return (
     <main className="flex min-h-screen flex-col">
         <Header />
@@ -14,17 +26,17 @@ export default function Home() {
                 <div></div>
                 <div></div>
                 <div className="z-10 h-64 bg-secondary/20 border-8 border-secondary rounded-tr-3xl rounded-bl-3xl shadow-xl flex items-center justify-center">
-                    <form action="" className="p-6 w-full bg-[#BCE3BA] font-roboto rounded-xl flex flex-col space-y-3">
+                    <form method="post" onSubmit={submitLogin} className="p-6 w-full bg-[#BCE3BA] font-roboto rounded-xl flex flex-col space-y-3">
                       <label htmlFor="" className="flex flex-col -space-y-1">
                          <span className="py-2 font-black font-kalam text-lg text-primary tracking-widest">USERNAME</span>
-                         <input className="px-4 py-3 ring-4 ring-secondary placeholder:text-[#F69320] placeholder:text-sm placeholder:font-semibold placeholder:tracking-widest rounded-full" type="text" placeholder="USERNAME" />
+                         <input name="username" onChange={onChange} className="px-4 py-3 ring-4 ring-secondary placeholder:text-[#F69320] placeholder:text-sm placeholder:font-semibold placeholder:tracking-widest rounded-full" type="text" placeholder="USERNAME" />
                       </label>
                       <label htmlFor="" className="flex flex-col -space-y-1">
                          <span className="py-2 font-black font-kalam text-lg text-primary tracking-widest">PASSWORD</span>
-                         <input className="px-4 py-3 ring-4 ring-secondary placeholder:text-[#F69320] placeholder:text-sm placeholder:font-semibold placeholder:tracking-widest rounded-full" type="text" placeholder="PASSWORD" />
+                         <input name="password" onChange={onChange} className="px-4 py-3 ring-4 ring-secondary placeholder:text-[#F69320] placeholder:text-sm placeholder:font-semibold placeholder:tracking-widest rounded-full" type="text" placeholder="PASSWORD" />
                       </label>
-                      {/* <button className="px-6 py-3 bg-primary border-4 border-secondary rounded-full text-secondary text-xl font-inter font-bold tracking-widest">SIGN IN</button> */}
-                      <Link href="/dash" className="px-6 py-3 bg-primary border-4 border-secondary rounded-full text-secondary text-xl text-center font-inter font-bold tracking-widest">SIGN IN</Link>
+                      <button type="submit" className="px-6 py-3 bg-primary border-4 border-secondary rounded-full text-secondary text-xl font-inter font-bold tracking-widest">SIGN IN</button>
+                      {/* <Link href="/dash" className="px-6 py-3 bg-primary border-4 border-secondary rounded-full text-secondary text-xl text-center font-inter font-bold tracking-widest">SIGN IN</Link> */}
                     </form>
                 </div>
             </div>

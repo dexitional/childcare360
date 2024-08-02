@@ -1,10 +1,12 @@
+
 import Link from 'next/link';
-import React from 'react'
 import { MdOutlineChildCare, MdPersonPin } from "react-icons/md";
 
 type Props = {}
 
 function Header({}: Props) {
+  
+
   return (
     <header className="z-10 w-full bg-white border-b-2 border-primarybg">
         <div className="px-4 md:mx-auto md:max-w-7xl min-h-14 md:min-h-24 flex items-center justify-between space-x-5">

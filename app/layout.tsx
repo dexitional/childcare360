@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { Inter,Shadows_Into_Light } from "next/font/google";
+import { Great_Vibes, Inter, Kalam, Open_Sans, Roboto_Mono, Shadows_Into_Light } from "next/font/google";
 import "./globals.css";
-import { Open_Sans, Roboto_Mono, Kalam, Great_Vibes } from 'next/font/google'
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({
    subsets: ["latin"],
@@ -52,6 +52,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${kalam.variable} ${greatVibes.variable} ${openSans.variable} ${robotoMono.variable} ${inter.variable} ${shadowsIntoLight.variable}`}>{children}</body>
+      <Toaster />
     </html>
   );
 }

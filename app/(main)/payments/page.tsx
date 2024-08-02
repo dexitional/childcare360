@@ -1,3 +1,4 @@
+import { fetcPayments } from "@/backend/controller";
 import { mainPaymentColumns } from "@/components/columns/mainPaymentColumns";
 import Create from "@/components/Create";
 import PaymentForm from "@/components/forms/PaymentForm";
@@ -6,37 +7,15 @@ import PageTitle from "@/components/PageTitle";
 import SheetModal from "@/components/SheetModal";
 import { DataTable } from "@/components/ui/datatable";
 
+async function getData(){
+  const data = await fetcPayments() ?? [];
+  return data;
+}
 
-export default function Home() {
+export default async function Home() {
 
+  const payments:any = await getData();
   
-  const payments:any = [
-    {
-      id: "728ed52f",
-      title: "Payment of Tuition Fees",
-      reference: "GTS123654",
-      child: 'Ebenezer Ackah',
-      paidAt: "Aug 03, 2024",
-      amount: 100,
-    },
-    {
-      id: "728ed52f",
-      title: "Payment of Feeding Fees",
-      reference: "MS435566",
-      child: 'Cynthia Gbedebu',
-      paidAt: "Jul 21, 2024",
-      amount: 230,
-    },
-    {
-      id: "728ed52f",
-      title: "Payment of PTA Fees",
-      reference: "KJ3443434",
-      child: 'Johnson Ackerson',
-      paidAt: "Jul 23, 2024",
-      amount: 500,
-    }
-  ]
-
   return (
     <main className="px-3 md:px-0 min-h-screen bg-primarybg/70 flex flex-col">
       <div className="py-4 md:py-10 md:mx-auto w-full md:max-w-7xl flex flex-col space-y-4 md:space-y-14">
