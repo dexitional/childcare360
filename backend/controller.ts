@@ -322,8 +322,9 @@ const db = new PrismaClient();
         let data:any = Object.fromEntries(formData);
         let resp;
         const { id } = data ?? null;
+        data.period = moment(data.period);
         delete data.id
-
+        console.log(data)
         if(id){   // Update
             resp = await db.activityType.update({
                 where: { id },
@@ -334,7 +335,6 @@ const db = new PrismaClient();
               data
            });
         }
-        
         revalidatePath('/categories')
         if(resp) return resp;
         return null;

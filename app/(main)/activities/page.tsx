@@ -1,3 +1,4 @@
+import { fetcActivities } from "@/backend/controller";
 import { mainActivityColumns } from "@/components/columns/mainActivityColumns";
 import Create from "@/components/Create";
 import ActivityForm from "@/components/forms/ActivityForm";
@@ -6,12 +7,14 @@ import PageTitle from "@/components/PageTitle";
 import SheetModal from "@/components/SheetModal";
 import { DataTable } from "@/components/ui/datatable";
 
+async function getData(){
+  const data = await fetcActivities() ?? [];
+  return data;
+}
 
-export default function Home() {
-
-  const activities:any = [
-    { child: 'Ebenezer Kwabena Blay', activity: 'Sleep', note:'Child slept around 12:00 GMT', createdAt:'Wednesday, July 6, 2024' },
-  ] 
+export default async function Home() {
+  
+  const activities:any = await getData(); 
 
   return (
     <main className="px-3 md:px-0 min-h-screen bg-primarybg/70 flex flex-col">

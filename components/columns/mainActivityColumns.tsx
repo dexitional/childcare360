@@ -57,8 +57,8 @@ export const mainActivityColumns: ColumnDef<Child>[] = [
     accessorKey: "period",
     header: "Activity Period",
     cell: ({ row }:any) => {
-      const dob =  moment(row?.original?.period).format("MMMM DD, YYYY");
-      return <div>{dob}</div>
+      const dob =  moment(row?.original?.period).format("MMMM DD, YYYY hh:mm");
+      return <div>{dob} GMT</div>
     }
   },
   {

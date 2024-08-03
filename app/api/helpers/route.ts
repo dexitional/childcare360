@@ -1,4 +1,4 @@
-import { fetcChilds, fetcNurseries, fetcStaffs } from "@/backend/controller";
+import { fetcCategories, fetcChilds, fetcNurseries, fetcStaffs } from "@/backend/controller";
 
 export const dynamic = 'force-dynamic' // defaults to auto
 export async function GET(request: Request, { params }: { params: { action: string } }) {
@@ -14,6 +14,10 @@ export async function GET(request: Request, { params }: { params: { action: stri
     
     } else if(action == 'child'){
       const data = await fetcChilds();
+      return Response.json(data)
+    
+    } else if(action == 'category'){
+      const data = await fetcCategories();
       return Response.json(data)
     }
     
