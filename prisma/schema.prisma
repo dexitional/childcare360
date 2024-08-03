@@ -13,12 +13,12 @@ generator client {
 // }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  // provider = "mysql"
+  // url      = env("DATABASE_URL")
 
-  // provider  = "postgresql"
-  // url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  // directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
 model nursery {
@@ -151,8 +151,8 @@ model payment {
   narrative String   @db.VarChar(255)
   reference String   @db.VarChar(255)
   method    String   @db.VarChar(100)
-  // amount    Float    @db.DoublePrecision
-  amount    Float    @db.Double
+  amount    Float    @db.DoublePrecision
+  // amount    Float    @db.Double
   paidOn    DateTime
   status    Boolean  @default(true)
   createdAt DateTime @default(now())
