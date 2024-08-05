@@ -8,9 +8,9 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// generator erd {
-//   provider = "prisma-erd-generator"
-// }
+generator erd {
+  provider = "prisma-erd-generator"
+}
 
 datasource db {
   // provider = "mysql"
@@ -102,6 +102,7 @@ model parentChild {
   child    child?  @relation(fields: [childId], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
   @@map("parent_child")
+  @@unique([parentId,childId])
 }
 
 model activity {

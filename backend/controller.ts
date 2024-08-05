@@ -7,10 +7,20 @@ const db = new PrismaClient();
 
       export async function authenticate(username:string,password:string) {
         try {
-       
-        
+            let user;
+            const staff = await db.staff.findFirst({ where: { reference: username, password } });
+            const parent = await db.parent.findFirst({ where: { reference: username, password } });
+            
+            if(staff) user = { 
+               ...staff, 
+               ...( staff?.position?.toLowerCase() == 'admin'? { image: 'admin', name: `${staff?.firstName} ${staff?.lastName}` }: { image: 'tutor', name: `${staff?.firstName} ${staff?.lastName}` }) 
+            }
+            if(parent) user = { ...parent, image: 'parent', name: `${parent?.firstName} ${parent?.lastName}` }
+            return user;
+
         } catch (error: any) {
-            console.log(error)
+            console.log(error);
+            return null;
         }
     }
 
@@ -213,10 +223,48 @@ const db = new PrismaClient();
         return null;
     }
 
+    /* PARENT- CHILD MODELS */
+    export async function postParentChild(formData: FormData) {
+        let data:any = Object.fromEntries(formData);
+        let resp;
+        const { id } = data ?? null;
+        delete data.id
+
+        if(id){   // Update
+            resp = await db.parentChild.update({
+                where: { id },
+                data
+             });
+        } else {  // Create
+           resp = await db.parentChild.create({
+              data
+           });
+        }
+        revalidatePath('/child')
+        if(resp) return resp;
+        return null;
+    }
+
+    export async function deleteParentChild(formData: FormData) {
+        let data:any = Object.fromEntries(formData);
+        const { id } = data ?? null;
+        const resp = await db.parentChild.delete({ where: { id } });
+        
+        revalidatePath('/child')
+        if(resp ) return resp;
+        return null;
+    }
+
     /* PAYMENT MODELS */
     export async function fetcPayments() {
         const resp = await db.payment.findMany({ include: { child: true }, orderBy: { createdAt: 'desc' }});
         if(resp.length) return resp;
+        return null;
+    }
+
+    export async function fetcPaymentsByChild(id: string) {
+        const resp = await db.payment.findMany({ where:{ childId: id }, include: { child: true }, orderBy: { createdAt: 'desc' }});
+        if(resp ) return resp;
         return null;
     }
 
@@ -262,8 +310,14 @@ const db = new PrismaClient();
 
     /* MEDICAL RECORDS MODELS */
     export async function fetcMedicals() {
-        const resp = await db.medicalRecord.findMany({ orderBy: { createdAt: 'desc' }});
+        const resp = await db.medicalRecord.findMany({ include:{ child: true }, orderBy: { createdAt: 'desc' }});
         if(resp.length) return resp;
+        return null;
+    }
+
+    export async function fetcMedicalByChild(id: string) {
+        const resp = await db.medicalRecord.findMany({ where: { childId: id }, include:{ child: true }, orderBy: { createdAt: 'desc' }});
+        if(resp ) return resp;
         return null;
     }
 
@@ -322,9 +376,7 @@ const db = new PrismaClient();
         let data:any = Object.fromEntries(formData);
         let resp;
         const { id } = data ?? null;
-        data.period = moment(data.period);
         delete data.id
-        console.log(data)
         if(id){   // Update
             resp = await db.activityType.update({
                 where: { id },
@@ -357,11 +409,24 @@ const db = new PrismaClient();
         return null;
     }
 
+    export async function fetcActivityByChild(id: string) {
+        const resp = await db.activity.findMany({ where: { childId: id }, include:{ child: true, activityType: true }, orderBy: { createdAt: 'desc' }});
+        if(resp ) return resp;
+        return null;
+    }
+    
+    export async function fetcActivityByNursery(id: string) {
+        const resp = await db.activity.findMany({ where: { child: { nurseryId: id }}, include:{ child: true, activityType: true }, orderBy: { createdAt: 'desc' }});
+        if(resp ) return resp;
+        return null;
+    }
+
     export async function fetcActivity(id: string) {
         const resp = await db.activity.findUnique({ where: { id } });
         if(resp ) return resp;
         return null;
     }
+
 
     export async function postActivity(formData: FormData) {
         let data:any = Object.fromEntries(formData);
@@ -397,8 +462,20 @@ const db = new PrismaClient();
 
     /* ATTENDANCE MODELS */
     export async function fetcAttendances() {
-        const resp = await db.activity.findMany({ include:{ child: true, activityType: true }, orderBy: { createdAt: 'desc' }});
+        const resp = await db.attendance.findMany({ include:{ child: true }, orderBy: { createdAt: 'desc' }});
         if(resp.length) return resp;
+        return null;
+    }
+
+    export async function fetcAttendanceByChild(id: string) {
+        const resp = db.attendance.findMany({ where: { childId:id }, include:{ child: true }, orderBy: { createdAt: 'desc' }});
+        if(resp ) return resp;
+        return null;
+    }
+
+    export async function fetcAttendanceByNursery(id: string) {
+        const resp = db.attendance.findMany({ where: { child: { nurseryId:id }}, include:{ child: true }, orderBy: { createdAt: 'desc' }});
+        if(resp ) return resp;
         return null;
     }
 
@@ -412,6 +489,8 @@ const db = new PrismaClient();
         let data:any = Object.fromEntries(formData);
         let resp;
         const { id } = data ?? null;
+        data.checkIn = moment(data.checkIn);
+        data.checkOut = moment(data.checkOut);
         delete data.id
 
         if(id){   // Update
@@ -441,7 +520,48 @@ const db = new PrismaClient();
     }
 
     /* REPORT MODELS */
-    
+    export async function fetcClassroom(id: string) {
+        const staff = await db.staff.findUnique({ where:{ id }, include:{ nursery: true }});
+        const daily = await db.attendance.count({ 
+            where:{ 
+               child: { nurseryId: staff?.nurseryId },
+               checkIn: {
+                 gte: moment(moment().format("YYYY-MM-DD")).toDate(),
+               }
+            }
+        });
+        const week = await db.$queryRaw`select distinct(date_format(checkIn,'%a')) as period, count(*) as num FROM attendance where checkIn >= ${moment().startOf('isoWeek').toDate()} and checkIn <= ${moment().endOf('isoWeek').toDate()}  group by date_format(checkIn,'%a');`;
+        
+        if(staff){
+          return { staff, daily,week }
+        } 
+        return null;
+    }
+
+    export async function fetcDashboard(id: string) {
+        try {
+            const child = await db.parentChild.findMany({ where: { parentId: id }, include:{ child: { include: {nursery: true }}}});
+            const staff = await db.staff.findUnique({ where:{ id }, include:{ nursery: true }});
+            const daily = await db.attendance.count({ 
+                where:{ 
+                    child: { nurseryId: staff?.nurseryId },
+                    checkIn: {
+                        gte: moment(moment().format("YYYY-MM-DD")).toDate(),
+                    }
+               }
+            });
+            const week = await db.$queryRaw`select distinct(date_format(checkIn,'%a')) as period, count(*) as num FROM attendance where checkIn >= ${moment().startOf('isoWeek').toDate()} and checkIn <= ${moment().endOf('isoWeek').toDate()}  group by date_format(checkIn,'%a');`;
+            
+            if(staff || child ){
+            return { staff, daily,week, child }
+            } 
+            return { staff: null, daily: 0, week: [], child: [] };
+            
+        } catch (error) {
+           console.log(error)
+           return null;
+        }
+    }
 
     /*
         <DropdownMenuItem><Link href="/child/4/payments">View Attendances</Link></DropdownMenuItem>

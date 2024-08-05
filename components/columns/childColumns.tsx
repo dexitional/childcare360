@@ -32,7 +32,7 @@ export const childColumns: ColumnDef<Child>[] = [
   
   {
     accessorKey: "reference",
-    header: "Child Reference",
+    header: "Child Ref",
   },
   {
     accessorKey: "firstName",
@@ -59,15 +59,20 @@ export const childColumns: ColumnDef<Child>[] = [
     header: "Date of Birth",
     cell: ({ row }:any) => {
       const dob =  moment(row?.original?.birthDate).format("MMMM DD, YYYY");
-      return <div>{dob}</div>
+      const age =  moment().diff(moment(row?.original?.birthDate),'year');
+      return <div>
+          {dob}<br/>
+          <span className="indent-2 text-sm font-bold tracking-wider italic">{age} yrs</span>
+        </div>
     }
   },
   {
-    accessorKey: "age",
-    header: "Age",
-    cell: ({ row }:any) => {
-      const age =  moment().diff(moment(row?.original?.birthDate),'year');
-      return <div>{age}</div>
+    accessorKey: "parent",
+    header: "Parents",
+    cell: ({ row }) => {
+      const data:any = row?.original;
+      if(!data?.parentChild.length) return(<div className="text-xs font-medium">-- Not Assigned --</div>)
+        return (<div className="flex flex-col space-y-1 font-sans">{data?.parentChild?.map((r:any) => (<div key={r.id} className="text-primary font-medium">{r?.parent?.firstName} {r?.parent?.lastName}</div>))}</div>)
     }
   },
   {

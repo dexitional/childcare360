@@ -4,6 +4,7 @@ import { postActivity } from "@/backend/controller";
 import moment from "moment";
 import { useLayoutEffect, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
+import { SheetClose } from "../ui/sheet";
 import { toast } from "../ui/use-toast";
 
 type Props = {
@@ -85,7 +86,7 @@ function ActivityForm({ data }: Props) {
         
        
         <input name="id" defaultValue={data?.id} type="hidden" />
-        {/* <SheetClose asChild> */}
+        <SheetClose asChild>
         { pending 
           ? <button type="button" disabled className=" px-6 py-2 mx-auto w-3/5 bg-secondary/30 border-b-8 border-primary/20 rounded text-primary font-black text-lg">
                 <span>SAVING ...</span>
@@ -94,7 +95,7 @@ function ActivityForm({ data }: Props) {
                 <span>SAVE</span>
             </button>
         }
-        {/* </SheetClose> */}
+        </SheetClose>
     </form>
   )
 }

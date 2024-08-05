@@ -1,6 +1,5 @@
 "use client"
 
-import { TrendingUp } from "lucide-react"
 import {
   Label,
   PolarGrid,
@@ -12,18 +11,16 @@ import {
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
+  CardTitle
 } from "@/components/ui/card"
 import { ChartConfig, ChartContainer } from "@/components/ui/chart"
-const chartData = [
-  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-]
+import moment from "moment"
+
 
 const chartConfig = {
-  visitors: {
+  members: {
     label: "Visitors",
   },
   safari: {
@@ -32,7 +29,12 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function ClassSizeChart() {
+export function ClassSizeChart({ count }: any) {
+
+  const chartData = [
+    { browser: "safari", members: count, fill: "var(--color-safari)" },
+  ]
+
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
@@ -57,7 +59,7 @@ export function ClassSizeChart() {
               className="first:fill-muted last:fill-background"
               polarRadius={[86, 74]}
             />
-            <RadialBar dataKey="visitors" background cornerRadius={10} />
+            <RadialBar dataKey="members" background cornerRadius={10} />
             <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
               <Label
                 content={({ viewBox }) => {
@@ -74,14 +76,14 @@ export function ClassSizeChart() {
                           y={viewBox.cy}
                           className="fill-foreground text-4xl font-bold"
                         >
-                          {chartData[0].visitors.toLocaleString()}
+                          {chartData[0]?.members?.toLocaleString()}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Visitors
+                          Members
                         </tspan>
                       </text>
                     )
@@ -97,7 +99,7 @@ export function ClassSizeChart() {
           Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
         </div> */}
         <div className="leading-none text-muted-foreground">
-          Showing total attendance for { Date.now().toString()}
+          Daily Attendance for { moment().format("dddd, MMMM DD, YYYY")}
         </div>
       </CardFooter>
     </Card>

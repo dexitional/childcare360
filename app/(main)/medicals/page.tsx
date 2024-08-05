@@ -1,3 +1,4 @@
+import { fetcMedicals } from "@/backend/controller";
 import { mainMedicColumns } from "@/components/columns/mainMedicColumns";
 import Create from "@/components/Create";
 import MedicalForm from "@/components/forms/MedicalForm";
@@ -6,12 +7,14 @@ import PageTitle from "@/components/PageTitle";
 import SheetModal from "@/components/SheetModal";
 import { DataTable } from "@/components/ui/datatable";
 
+async function getData(){
+  const data = await fetcMedicals() ?? [];
+  return data;
+}
 
-export default function Home() {
+export default async function Home() {
 
-  const medications:any = [
-    { child: 'Ebenezer Kwabena Blay', allergies: 'Running nose, Small bumbs', medications:'Vitamin C syrup', specialNeeds:'Constant supply of tissue for running nose' },
-  ] 
+  const medications:any = await getData();
 
   return (
     <main className="px-3 md:px-0 min-h-screen bg-primarybg/70 flex flex-col">

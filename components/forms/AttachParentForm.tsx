@@ -1,6 +1,6 @@
 
 "use client"
-import { postMedical } from "@/backend/controller";
+import { postParentChild } from "@/backend/controller";
 import { useLayoutEffect, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { SheetClose } from "../ui/sheet";
@@ -11,19 +11,26 @@ type Props = {
 }
  
 
-function MedicalForm({ data }: Props) {
+function AttachParentForm({ data }: Props) {
   const { pending } = useFormStatus();
   const formRef = useRef<HTMLFormElement>(null);
   const [helper, setHelper]:any = useState({})
+  const [form, setForm ]:any = useState(data)
   
   const getData = async () => {
-      const resp = await fetch(`/api/helpers?action=child`, { cache: 'no-store'});
-      const child = await resp.json()
-      if(child) setHelper({ child })
+      const resp = await Promise.all([
+        fetch(`/api/helpers?action=parent`, { cache: 'no-store'}),
+        fetch(`/api/helpers?action=child`, { cache: 'no-store'})
+      ]);
+
+      const parents = await resp[0].json();
+      const child = await resp[1].json();
+      console.log(parents,child);
+      if(parents && child) setHelper({ parents, child })
   }
 
   const action = async (formData: FormData) => {
-    const resp = await postMedical(formData);
+    const resp = await postParentChild(formData);
     if(resp){
        formRef.current?.reset(); 
        toast({
@@ -42,6 +49,7 @@ function MedicalForm({ data }: Props) {
     getData();
   },[])
 
+
   return (
     <form 
         action={ action } 
@@ -50,30 +58,23 @@ function MedicalForm({ data }: Props) {
     >
         <label htmlFor="" className=" w-full grid gap-1.5">
             <span className="indent-4 font-bold text-base text-primary/80 ">Name of Child</span>
-            <select name="childId" defaultValue={data?.childId} className="px-4 py-2 bg-[#FAF6F2] rounded-full text-primary shadow focus:outline-none focus:ring-4 focus:ring-secondary/40 w-full">
-             <option>-- Choose Child --</option>
+            <select name="childId" defaultValue={data?.childId} required className="px-4 py-2 bg-[#FAF6F2] rounded-full text-primary shadow focus:outline-none focus:ring-4 focus:ring-secondary/40 w-full">
+              <option>-- Choose --</option>
               { helper?.child?.map((row:any) => (
                 <option key={row?.id} value={row?.id} selected={data?.childId == row?.id}>{row?.firstName} {row?.lastName} ({row?.reference}) - {row?.nursery?.name}</option>    
               ))}
             </select>
-        </label>
-       
-        <label htmlFor="" className="grid gap-1.5">
-            <span className="indent-4 font-bold text-base text-primary/80">Allergies</span>
-            <textarea name="allergies" defaultValue={data?.allergies} placeholder="Allergies" rows={4} className="px-4 py-2 bg-[#FAF6F2] rounded-lg text-primary shadow focus:outline-none focus:ring-4 focus:ring-secondary/40"/>
-        </label>
-
-        <label htmlFor="" className="grid gap-1.5">
-            <span className="indent-4 font-bold text-base text-primary/80">Medications</span>
-            <textarea name="medication" defaultValue={data?.medication} placeholder="Medication" rows={4} className="px-4 py-2 bg-[#FAF6F2] rounded-lg text-primary shadow focus:outline-none focus:ring-4 focus:ring-secondary/40"/>
-        </label>
-
-        <label htmlFor="" className="grid gap-1.5">
-            <span className="indent-4 font-bold text-base text-primary/80">Special Needs</span>
-            <textarea name="specialNeeds" defaultValue={data?.specialNeeds} placeholder="Special Needs" rows={4} className="px-4 py-2 bg-[#FAF6F2] rounded-lg text-primary shadow focus:outline-none focus:ring-4 focus:ring-secondary/40"/>
-        </label>
+        </label> 
+        <label htmlFor="" className=" w-full grid gap-1.5">
+            <span className="indent-4 font-bold text-base text-primary/80 ">Name of Parent</span>
+            <select name="parentId" defaultValue={data?.parentId} required className="px-4 py-2 bg-[#FAF6F2] rounded-full text-primary shadow focus:outline-none focus:ring-4 focus:ring-secondary/40 w-full">
+              <option>-- Choose --</option>
+              { helper?.parents?.map((row:any) => (
+                <option key={row?.id} value={row?.id} selected={data?.parentId == row?.id}>{row?.firstName} {row?.lastName} ({row?.reference}) - {row?.nursery?.name}</option>    
+              ))}
+            </select>
+        </label> 
         
-       
         <input name="id" defaultValue={data?.id} type="hidden" />
         <SheetClose asChild>
         { pending 
@@ -89,4 +90,4 @@ function MedicalForm({ data }: Props) {
   )
 }
 
-export default MedicalForm
+export default AttachParentForm

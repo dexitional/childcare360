@@ -1,3 +1,4 @@
+import { fetcParents } from "@/backend/controller";
 import { parentColumns } from "@/components/columns/parentColumns";
 import Create from "@/components/Create";
 import ParentForm from "@/components/forms/ParentForm";
@@ -6,12 +7,14 @@ import PageTitle from "@/components/PageTitle";
 import SheetModal from "@/components/SheetModal";
 import { DataTable } from "@/components/ui/datatable";
 
+async function getData(){
+  const data = await fetcParents() ?? [];
+  return data;
+}
 
-export default function Home() {
+export default async function Home() {
 
-  const parents:any = [
-    { reference:'41329276', fname: 'Ebenezer Kwabena Blay', lname: 'Ackah', children:'2', gender:'Male', phone:'0277675089', email:'ebenezerkb@gmail.com', address: 'MIS Section, USA', action: 'test'},
-  ] 
+  const parents:any = await getData();
 
   return (
     <main className="px-3 md:px-0 min-h-screen bg-primarybg/70 flex flex-col">

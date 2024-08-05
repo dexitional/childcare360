@@ -1,13 +1,18 @@
-import CredentialsProvider from "next-auth/providers/credentials";
+import { authenticate } from "@/backend/controller";
 import { NextAuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authOptions: NextAuthOptions & any = {
+    session: {
+      strategy: "jwt",
+    },
+    secret: process.env.NEXTAUTH_SECRET,
     providers: [
       CredentialsProvider({
-        name: "login",
+        name: "credentials",
         credentials: {
-          username: { label: "Username", type: "text", placeholder: "Username" },
-          password: { label: "Password", type: "password", placeholder: "Password" }
+          username: { label: "Username", type: "text" },
+          password: { label: "Password", type: "password" }
         },
         async authorize(credentials, req) {
           try {
@@ -15,14 +20,10 @@ export const authOptions: NextAuthOptions & any = {
               if(!username) throw new Error("Username empty!")
               if(!password) throw new Error("Password empty!")
               
-              // const resp = await getVoucher(serial,pin);
-              const resp = { total: 0, documents: [] }
-              if(resp.total > 0){
-                 const user:any = resp?.documents[0];
-                 return { ...user, gid: 1 }
-              } else { 
-                throw new Error("Invalid details");
-              }
+              const resp = await authenticate(username,password);
+              if(resp) return resp;
+              else throw new Error("Invalid details");
+             
           } catch(error){
              console.log(error)
              return null;
@@ -31,23 +32,18 @@ export const authOptions: NextAuthOptions & any = {
         },
       }),
     ],
-    session: {
-      strategy: "jwt",
-    },
-    secret: process.env.NEXTAUTH_SECRET,
     callbacks: {
       async jwt({ token, user, profile, account }: any) {
-          return { ...token, ...user };
+        return { ...token };
       },
       async session({ session, token, user }: any) {
-          // Send properties to the client, like an access_token from a provider.
-          session.user = { ...token };
-          return session;
+        session.user = { ...token };
+        console.log(session)
+        return session;
       },
     },
     pages:{
       signIn:'/',
-      error: "/error",
     },
     
   };

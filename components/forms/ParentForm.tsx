@@ -1,8 +1,10 @@
 
 "use client"
-import { postNursery } from "@/backend/controller";
+import { postParent } from "@/backend/controller";
 import { useRef } from "react";
 import { useFormStatus } from "react-dom";
+import { SheetClose } from "../ui/sheet";
+import { toast } from "../ui/use-toast";
 
 type Props = {
     data?: any;
@@ -12,14 +14,26 @@ type Props = {
 function ParentForm({ data }: Props) {
   const { pending } = useFormStatus();
   const formRef = useRef<HTMLFormElement>(null);
- 
+  
+  const action = async (formData: FormData) => {
+    const resp = await postParent(formData);
+    if(resp){
+       formRef.current?.reset(); 
+       toast({
+          title: "Record Saved!",
+          className:"py-3 px-4 bg-green-100 text-green-800",
+       })
+    } else {
+        toast({
+           title: "Submission failed!",
+           className:"py-3 px-4 bg-red-100 text-red-800",
+        })
+    }
+  }
 
   return (
     <form 
-        action={ async (formData) => {
-          await postNursery(formData);
-          formRef.current?.reset();
-        }} 
+        action={ action } 
         className="py-10 w-full h-full grid gap-6 overflow-y-scroll"
         ref={formRef}
     >
@@ -37,11 +51,10 @@ function ParentForm({ data }: Props) {
         </label>
         <label htmlFor="" className="grid gap-1.5">
             <span className="indent-4 font-bold text-base text-primary/80">Gender</span>
-            <select name="" id="" className="px-4 py-2 bg-[#FAF6F2] rounded-full text-primary shadow focus:outline-none focus:ring-4 focus:ring-secondary/40">
+            <select name="gender" defaultValue={data?.gender} className="px-4 py-2 bg-[#FAF6F2] rounded-full text-primary shadow focus:outline-none focus:ring-4 focus:ring-secondary/40">
                 <option value="M">Male</option>
                 <option value="F">Female</option>
             </select>
-            {/* <input type="text" name="reference" defaultValue={data?.reference} placeholder="Staff Reference" className="px-4 py-2 bg-[#FAF6F2] rounded-full text-primary shadow focus:outline-none focus:ring-4 focus:ring-secondary/40"/> */}
         </label>
         
         <label htmlFor="" className="grid gap-1.5">
@@ -62,7 +75,7 @@ function ParentForm({ data }: Props) {
         </label>
        
         <input name="id" defaultValue={data?.id} type="hidden" />
-
+        <SheetClose asChild>
         { pending 
           ? <button type="button" disabled className=" px-6 py-2 mx-auto w-3/5 bg-secondary/30 border-b-8 border-primary/20 rounded text-primary font-black text-lg">
                 <span>SAVING ...</span>
@@ -71,6 +84,7 @@ function ParentForm({ data }: Props) {
                 <span>SAVE</span>
             </button>
         }
+        </SheetClose>
     </form>
   )
 }
