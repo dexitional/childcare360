@@ -163,7 +163,7 @@ model payment {
 
 model attendance {
   id        String    @id @default(uuid())
-  childId   String?
+  childId   String? 
   checkIn   DateTime?
   checkOut  DateTime?
   status    Boolean   @default(true)

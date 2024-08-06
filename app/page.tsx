@@ -23,6 +23,7 @@ export default function Home() {
         router.push(resp?.url); 
       } 
     } catch (error) {
+      setLoading(false);
       console.log(error)
     }
   }

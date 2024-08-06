@@ -1,7 +1,7 @@
 
 "use client"
 import { postStaff } from "@/backend/controller";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { SheetClose } from "../ui/sheet";
 import { toast } from "../ui/use-toast";
@@ -38,7 +38,7 @@ function StaffForm({ data }: Props) {
     }
   }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     getData();
   },[])
 

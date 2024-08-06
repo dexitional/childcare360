@@ -523,15 +523,15 @@ const db = new PrismaClient();
     export async function fetcClassroom(id: string) {
         const staff = await db.staff.findUnique({ where:{ id }, include:{ nursery: true }});
         const daily = await db.attendance.count({ 
-            where:{ 
-               child: { nurseryId: staff?.nurseryId },
-               checkIn: {
-                 gte: moment(moment().format("YYYY-MM-DD")).toDate(),
-               }
+          where:{ 
+            child: { nurseryId: staff?.nurseryId },
+            checkIn: {
+               gte: moment(moment().format("YYYY-MM-DD")).toDate(),
             }
+          }
         });
-        const week = await db.$queryRaw`select distinct(date_format(checkIn,'%a')) as period, count(*) as num FROM attendance where checkIn >= ${moment().startOf('isoWeek').toDate()} and checkIn <= ${moment().endOf('isoWeek').toDate()}  group by date_format(checkIn,'%a');`;
-        
+        // const week = await db.$queryRaw`select distinct(date_format("checkIn",'%a')) as period, count(*) as num FROM attendance where "checkIn" >= ${moment().startOf('isoWeek').toDate()} and "checkIn" <= ${moment().endOf('isoWeek').toDate()}  group by date_format("checkIn",'%a');`; // MYSQL
+        const week = await db.$queryRaw`select distinct(to_char("checkIn",'Dy')) as period, count(*) as num FROM attendance as a left join child as c on a."childId" = c.id where c."nurseryId" = ${staff?.nurseryId} and "checkIn" >= ${moment().startOf('isoWeek').toDate()} and "checkIn" <= ${moment().endOf('isoWeek').toDate()}  group by to_char("checkIn",'Dy');`; // POSTGRES
         if(staff){
           return { staff, daily,week }
         } 
@@ -550,8 +550,9 @@ const db = new PrismaClient();
                     }
                }
             });
-            const week = await db.$queryRaw`select distinct(date_format(checkIn,'%a')) as period, count(*) as num FROM attendance where checkIn >= ${moment().startOf('isoWeek').toDate()} and checkIn <= ${moment().endOf('isoWeek').toDate()}  group by date_format(checkIn,'%a');`;
-            
+            // const week = await db.$queryRaw`select distinct(date_format("checkIn",'%a')) as period, count(*) as num FROM attendance where "checkIn" >= ${moment().startOf('isoWeek').toDate()} and "checkIn" <= ${moment().endOf('isoWeek').toDate()}  group by date_format("checkIn",'%a');`; // MYSQL
+            const week = await db.$queryRaw`select distinct(to_char("checkIn",'Dy')) as period, count(*) as num FROM attendance as a left join child as c on a."childId" = c.id where c."nurseryId" = ${staff?.nurseryId} and "checkIn" >= ${moment().startOf('isoWeek').toDate()} and "checkIn" <= ${moment().endOf('isoWeek').toDate()}  group by to_char("checkIn",'Dy');`; // POSTGRES
+        
             if(staff || child ){
             return { staff, daily,week, child }
             } 

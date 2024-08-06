@@ -18,7 +18,6 @@ import { TbLogs } from "react-icons/tb";
 
 async function getData(id:string){
   const data = await fetcDashboard(id) ?? [];
-  console.log(data)
   return { data };
 }
 
@@ -48,9 +47,9 @@ export default async function Home() {
 
   const cmenus:any = [
     { title: 'Record Attendance', Icon: FaChildren, Intent: AttendanceForm, modal: true},
-    { title: 'View Attendance', Icon: FaHandsHoldingChild, Intent:'/child', modal: false},
+    //{ title: 'View Attendance', Icon: FaHandsHoldingChild, Intent:'/child', modal: false},
     { title: 'Record Activity', Icon: FaPeopleGroup, Intent: ActivityForm, modal: true},
-    { title: 'View Activities', Icon: FaHandsHoldingChild, Intent:'/child', modal: false},
+    //{ title: 'View Activities', Icon: FaHandsHoldingChild, Intent:'/child', modal: false},
   ] 
 
  
