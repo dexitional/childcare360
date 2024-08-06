@@ -34,7 +34,7 @@ const toastVariants = cva(
           "destructive group border-destructive bg-destructive text-destructive-foreground",
       },
       position: {
-        default: 'top-0 sm:bottom-0 sm:right-0 sm:top-auto',
+        default: 'top-0 sm:top-0 sm:right-0 sm:top-auto',
         top: 'top-0 right-0 data-[state=closed]:slide-out-to-right-full',
         'top-left': 'top-0 left-0 data-[state=closed]:slide-out-to-left-full',
         bottom: 'bottom-0 right-0 data-[state=open]:slide-in-from-bottom-full ',
