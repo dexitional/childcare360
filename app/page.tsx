@@ -1,15 +1,19 @@
 "use client"
 import Header from "@/components/Header";
+import { toast } from "@/components/ui/use-toast";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { BiLoaderCircle } from "react-icons/bi";
 import Bg from '../public/loginbg.svg';
 
 export default function Home() {
   const router = useRouter();
   const [form,setForm ]:any = useState();
-  const [ loading, setLoading ] = useState(false)
+  const [ loading, setLoading ] = useState(false);
+  const [ msg, setMsg ] = useState(null);
+
 
   const onChange = (e:any) => setForm({ ...form, [e.target.name]: e.target.value })
   
@@ -19,9 +23,18 @@ export default function Home() {
       setLoading(true)
       const resp:any = await signIn('credentials', { redirect: false, callbackUrl: `/dash`, username: form?.username?.trim(), password: form?.password?.trim() })
       if(resp?.ok){
-        setLoading(false);
         router.push(resp?.url); 
-      } 
+        //window.location.href=resp?.url
+        setLoading(false);
+      } else {
+        toast({
+          position:"top",
+          title: "INVALID CREDENTIALS!",
+          className: "py-3 bg-red-500 text-white text-3xl font-black tracking-wide"
+        })
+        setLoading(false);
+        
+      }
     } catch (error) {
       setLoading(false);
       console.log(error)
@@ -49,7 +62,10 @@ export default function Home() {
                       <button type="submit" className="px-6 py-3 bg-primary border-4 border-secondary rounded-full text-secondary text-xl font-inter font-bold tracking-widest">
                         { !loading 
                           ? <span>SIGN IN</span>
-                          : <span>Authenticating ...</span>
+                          : <div className="flex item-center justify-center space-x-3">
+                              <BiLoaderCircle className="h-6 w-6 animate-spin" />
+                              <span className="tracking-wide text-lg animate-pulse">Authenticating ...</span>
+                            </div>
                         }
                       </button>
                     </form>
